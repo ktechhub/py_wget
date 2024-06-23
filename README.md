@@ -1,3 +1,22 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/ktechhub/doctoc)*
+
+<!---toc start-->
+
+* [pywgett](#pywgett)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+  * [Usage](#usage)
+    * [Options:](#options)
+  * [Features](#features)
+  * [GitHub](#github)
+  * [License](#license)
+    * [Contribution](#contribution)
+
+<!---toc end-->
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 # pywgett
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ktechhub/pywgett/blob/main/LICENSE)
