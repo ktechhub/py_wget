@@ -4,15 +4,15 @@
 
 <!---toc start-->
 
-* [pywgett](#pywgett)
-  * [Prerequisites](#prerequisites)
-  * [Installation](#installation)
-  * [Usage](#usage)
-    * [Options:](#options)
-  * [Features](#features)
-  * [GitHub](#github)
-  * [License](#license)
-    * [Contribution](#contribution)
+- [pywgett](#pywgett)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Example usage:](#example-usage)
+  - [Features](#features)
+  - [GitHub](#github)
+  - [License](#license)
+    - [Contribution](#contribution)
 
 <!---toc end-->
 
@@ -49,44 +49,50 @@ Download a file from a URL:
 
 ```sh
 pywget --help
-Usage: pywget [OPTIONS] URL
+Usage: pywget [OPTIONS] [URLS]...
 
   Download utility to fetch a file from the internet.
 
-  Args:     url (str): The URL of the file to download.     output_file (str):
-  The name of the file to save the downloaded file as.     header (list):
-  Optional HTTP headers to include in the request.     verbose (bool): Enable
-  verbose mode.
+  Args:     urls (tuple): The URLs of the files to download.
+  If multiple URLs are provided, they will be downloaded in parallel.
+  If a single URL is provided, it will be downloaded serially.     output
+  (str): The name of the file or directory to save the downloaded file(s) as.
+  header (list): Optional HTTP headers to include in the request.     parallel
+  (int): Number of parallel downloads.     verbose (bool): Enable verbose
+  mode.
 
   Returns:     None
 
 Options:
-  -o, --output_file TEXT  Optional output file name
+  -o, --output TEXT       Optional output file name or directory
   --header TEXT           Custom headers to include in the request, e.g.
                           --header 'Authorization: Bearer token', --header
                           'Content-Type: application/json', --header 'User-
                           Agent: Mozilla/5.0', etc.
+  -p, --parallel INTEGER  Number of parallel downloads [default: 4]
   --verbose               Enable verbose mode to output detailed information
                           about the download process.
   --version               Show the version and exit.
   --help                  Show this message and exit.
 ```
 
-### Options:
-
-- `-o, --output_file`: Optional output file name.
-- `--header`: Custom headers to include in the request.
-- `--verbose`: Enable verbose mode.
-
-Example usage:
+### Example usage:
+Single URL Download;
 ```sh
 pywget https://www.example.com/file.zip
+#or
+pywget https://example.com/file.zip -o output_file.zip
 ```
-
 ```sh
-pywget https://www.example.com/file.zip --output_file my_file.zip --header "Authorization: Bearer token" --verbose
+pywget https://example.com/file.zip -o output_file.zip --header "Authorization: Bearer token" --header "User-Agent: CustomUserAgent/1.0" --verbose
 ```
 
+Multiple URLS download
+```sh
+pywget https://example.com/file1.zip https://example.com/file2.zip -o /path/to/save -p 6
+pywget https://www.ktechhub.com/assets/logo.13616b6b.png https://www.ktechhub.com/assets/logo.13616b6b.png
+pywget https://example.com/file1.zip https://example.com/file2.zip -p 6
+```
 ## Features
 - Download files from URLs with ease.
 - Supports custom HTTP headers for authentication and content type.

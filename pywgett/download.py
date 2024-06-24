@@ -2,7 +2,6 @@
 """
 Download utility as an easy way to get files from the net
 """
-import click
 import sys
 import os
 import shutil
@@ -10,7 +9,7 @@ import tempfile
 import requests
 from urllib.parse import urlparse
 
-from .utils import bar_progress
+from .utils import bar_progress, click_echo
 
 
 def filename_from_url(url):
@@ -21,7 +20,7 @@ def filename_from_url(url):
         url (str): The URL to get the filename from.
 
     Returns:
-        str: The filename from the URL.
+        str: The name of the file the downloaded file was saved as.
     """
     return os.path.basename(urlparse(url).path) or "download.wget"
 
@@ -56,11 +55,9 @@ def download_file(url, out=None, headers={}, verbose=False):
                         f"\r{progress_bar} {current_size}/{total_size if total_size else 'unknown'} bytes"
                     )
                     if verbose:
-                        click.echo(
-                            click.style(
-                                f"\nDownloaded {current_size}/{total_size if total_size else 'unknown'} bytes",
-                                fg="blue",
-                            )
+                        click_echo(
+                            f"\nDownloaded {current_size}/{total_size if total_size else 'unknown'} bytes",
+                            color="blue",
                         )
                     sys.stdout.flush()
 
@@ -75,5 +72,5 @@ def download_file(url, out=None, headers={}, verbose=False):
 
     shutil.move(tmpfile, out)
     if verbose:
-        click.echo(click.style(f"Downloaded {url} to {out}", fg="green"))
+        click_echo(f"Downloaded {url} to {out}", color="green")
     return out

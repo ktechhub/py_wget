@@ -1,6 +1,20 @@
 import click
 
 
+def click_echo(message, color="green"):
+    """
+    Print a message using Click's echo function.
+
+    Args:
+        message (str): The message to print.
+        color (str): The color of the message.
+
+    Returns:
+        None
+    """
+    click.echo(click.style(message, fg=color), color=True)
+
+
 def bar_progress(current, total, width=80):
     """
     Create a progress bar.
@@ -36,5 +50,5 @@ def parse_headers(header_list, verbose=False):
         key, value = header.split(":", 1)
         headers[key.strip()] = value.strip()
     if verbose:
-        click.echo(click.style(f"Extra Headers Supplied: {headers}", fg="blue"))
+        click_echo(f"Extra Headers Supplied: {headers}", color="blue")
     return headers
