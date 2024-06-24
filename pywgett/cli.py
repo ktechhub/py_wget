@@ -33,8 +33,13 @@ from .utils import parse_headers, click_echo
     is_flag=True,
     help="Enable verbose mode to output detailed information about the download process.",
 )
+@click.option(
+    "--quiet",
+    is_flag=True,
+    help="Suppress output and run silently except for errors or essential messages",
+)
 @click.version_option(prog_name="PyWget")
-def main(urls, output, header, parallel, verbose):
+def main(urls, output, header, parallel, verbose, quiet):
     """
     Download utility to fetch a file from the internet.
 
@@ -46,18 +51,19 @@ def main(urls, output, header, parallel, verbose):
         header (list): Optional HTTP headers to include in the request.
         parallel (int): Number of parallel downloads.
         verbose (bool): Enable verbose mode.
+        quiet (bool): Suppress output and run silently except for errors or essential messages.
 
     Returns:
         None
     """
-    headers = parse_headers(header, verbose=verbose)
+    headers = parse_headers(header, verbose=verbose, quiet=quiet)
     if len(urls) == 1:
         # Single URL download
         url = urls[0]
         if verbose:
-            click_echo(f"Downloading {url} to {output}", color="yellow")
-        filename = download_file(url, output, headers, verbose)
-        click.echo(click.style(f"\nSaved under {filename}", fg="green") + f" {url}")
+            click_echo(f"Downloading {url} to {output}", color="yellow", quiet=quiet)
+        filename = download_file(url, output, headers, verbose, quiet)
+        click_echo(f"Saved under {filename} for {url}", color="green", quiet=quiet)
     else:
         # Multiple URL downloads in parallel
         if output is None:
@@ -71,13 +77,13 @@ def main(urls, output, header, parallel, verbose):
 
         def download_with_params(url):
             filename = os.path.join(output, filename_from_url(url))
-            return download_file(url, filename, headers, verbose)
+            return download_file(url, filename, headers, verbose, quiet=quiet)
 
         with ThreadPoolExecutor(max_workers=parallel) as executor:
             results = list(executor.map(download_with_params, urls))
 
         for result, url in zip(results, urls):
-            click_echo(f"Saved under {result} for {url}", color="green")
+            click_echo(f"Saved under {result} for {url}", color="green", quiet=quiet)
 
 
 if __name__ == "__main__":

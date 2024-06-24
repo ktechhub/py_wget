@@ -25,7 +25,7 @@ def filename_from_url(url):
     return os.path.basename(urlparse(url).path) or "download.wget"
 
 
-def download_file(url, out=None, headers={}, verbose=False):
+def download_file(url, out=None, headers={}, verbose=False, quiet=False):
     """
     Download a file from the internet.
 
@@ -33,6 +33,7 @@ def download_file(url, out=None, headers={}, verbose=False):
         url (str): The URL of the file to download.
         out (str): The name of the file to save the downloaded file as.
         headers (dict): Optional HTTP headers to include in the request.
+        quiet (bool): Suppress output and run silently except for errors or essential messages.
 
     Returns:
         str: The name of the file the downloaded file was saved as.
@@ -51,13 +52,11 @@ def download_file(url, out=None, headers={}, verbose=False):
                     f.write(chunk)
                     current_size += len(chunk)
                     progress_bar = bar_progress(current_size, total_size)
-                    sys.stdout.write(
-                        f"\r{progress_bar} {current_size}/{total_size if total_size else 'unknown'} bytes"
-                    )
                     if verbose:
                         click_echo(
-                            f"\nDownloaded {current_size}/{total_size if total_size else 'unknown'} bytes",
+                            f"\r{progress_bar} {current_size}/{total_size if total_size else 'unknown'} bytes for {url}",
                             color="blue",
+                            quiet=quiet,
                         )
                     sys.stdout.flush()
 
@@ -72,5 +71,5 @@ def download_file(url, out=None, headers={}, verbose=False):
 
     shutil.move(tmpfile, out)
     if verbose:
-        click_echo(f"Downloaded {url} to {out}", color="green")
+        click_echo(f"Downloaded {url} to {out}", color="green", quiet=quiet)
     return out
